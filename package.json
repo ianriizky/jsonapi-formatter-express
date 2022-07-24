@@ -1,6 +1,6 @@
 {
   "name": "@ianriizky/jsonapi-formatter-express",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "An Express library to serialize/deserialize the incoming request and outcoming response into JSON:API format.",
   "type": "commonjs",
   "main": "dist/index.js",
