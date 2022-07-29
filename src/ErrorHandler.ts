@@ -1,7 +1,4 @@
-import {
-  AbstractJsonApi,
-  JsonApiException,
-} from '@ianriizky/jsonapi-formatter';
+import { JsonApi, JsonApiErrors } from '@ianriizky/jsonapi-formatter';
 import { config } from 'dotenv';
 import { expand } from 'dotenv-expand';
 import { NextFunction, Request, Response } from 'express';
@@ -15,7 +12,14 @@ type CustomCallback = (
   req: Request,
   res: Response,
   next: NextFunction
-) => Response | AbstractJsonApi | void;
+) => Response | JsonApi | void;
+
+function jsonApiException(show_meta_on_error: boolean) {
+  return new JsonApiErrors({
+    app_url: process.env?.APP_URL || 'http://localhost:3000',
+    show_meta_on_error,
+  });
+}
 
 export function errorHandler(customCallback?: CustomCallback) {
   return (err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -36,7 +40,7 @@ export function errorHandler(customCallback?: CustomCallback) {
         return result;
       }
 
-      if (result instanceof AbstractJsonApi) {
+      if (result instanceof JsonApi) {
         return response.jsonApi(result);
       }
     }
@@ -53,13 +57,8 @@ export function errorHandler(customCallback?: CustomCallback) {
       show_meta_on_error = false;
     }
 
-    const jsonApiException = new JsonApiException({
-      app_url: process.env?.APP_URL || 'http://localhost:3000',
-      show_meta_on_error,
-    });
-
     return response.jsonApi(
-      jsonApiException
+      jsonApiException(show_meta_on_error)
         .setHttpStatusCode(StatusCodes.INTERNAL_SERVER_ERROR)
         .setErrorsFromNodejs(err)
     );

@@ -1,4 +1,4 @@
-import { AbstractJsonApi } from '@ianriizky/jsonapi-formatter';
+import { JsonApi } from '@ianriizky/jsonapi-formatter';
 import { Response as ExpressResponse } from 'express';
 
 export class Response {
@@ -8,7 +8,7 @@ export class Response {
     this.res = res;
   }
 
-  public jsonApi(body: AbstractJsonApi): ExpressResponse {
+  public jsonApi(body: JsonApi): ExpressResponse {
     return this.res.status(body.httpStatusCode).json(body.serialize());
   }
 }
