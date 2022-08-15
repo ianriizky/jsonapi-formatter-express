@@ -8,7 +8,7 @@ export class Response {
     this.res = res;
   }
 
-  public jsonApi(body: JsonApi): ExpressResponse {
+  public send(body: JsonApi): ExpressResponse {
     return this.res.status(body.httpStatusCode).json(body.serialize());
   }
 }

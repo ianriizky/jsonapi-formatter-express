@@ -27,7 +27,10 @@ export function errorHandler(customCallback?: CustomCallback) {
 
     console.error(error);
 
-    if (res.headersSent) {
+    if (
+      res.headersSent ||
+      req.headers['content-type'] !== JsonApi.contentType
+    ) {
       return next(err);
     }
 
@@ -41,7 +44,7 @@ export function errorHandler(customCallback?: CustomCallback) {
       }
 
       if (result instanceof JsonApi) {
-        return response.jsonApi(result);
+        return response.send(result);
       }
     }
 
@@ -57,7 +60,7 @@ export function errorHandler(customCallback?: CustomCallback) {
       show_meta_on_error = false;
     }
 
-    return response.jsonApi(
+    return response.send(
       jsonApiException(show_meta_on_error)
         .setHttpStatusCode(StatusCodes.INTERNAL_SERVER_ERROR)
         .setErrorsFromNodejs(err)
