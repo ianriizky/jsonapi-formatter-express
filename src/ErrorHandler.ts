@@ -23,10 +23,6 @@ function jsonApiException(show_meta_on_error: boolean) {
 
 export function errorHandler(customCallback?: CustomCallback) {
   return (err: Error, req: Request, res: Response, next: NextFunction) => {
-    const error = err.stack || err;
-
-    console.error(error);
-
     if (
       res.headersSent ||
       req.headers['content-type'] !== JsonApi.contentType
