@@ -4,6 +4,12 @@ All notable changes to `JSON:API Formatter for Express` will be documented in th
 
 ## [Unreleased](https://github.com/ianriizky/jsonapi-formatter-express/compare/v0.2.0...develop)
 
+## [0.2.1 (2022-10-23)](https://github.com/ianriizky/jsonapi-formatter-express/releases/tag/v0.2.1)
+
+### Fixed
+
+- Remove res.headersSent on error handler. ([#e9845db](https://github.com/ianriizky/jsonapi-formatter-express/commit/e9845db7b043aa44fe4739ab12b6da3498e20731))
+
 ## [0.2.0 (2022-10-22)](https://github.com/ianriizky/jsonapi-formatter-express/releases/tag/v0.2.0)
 
 ### Added
