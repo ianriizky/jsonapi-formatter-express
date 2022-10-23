@@ -23,15 +23,6 @@ function jsonApiException(show_meta_on_error: boolean) {
 
 export function errorHandler(customCallback?: CustomCallback) {
   return (err: Error, req: Request, res: Response, next: NextFunction) => {
-    if (
-      res.headersSent ||
-      req.headers['content-type'] !== JsonApi.contentType
-    ) {
-      return next(err);
-    }
-
-    const response = new JsonApiResponse(res);
-
     if (customCallback) {
       const result = customCallback(err, req, res, next);
 
@@ -40,8 +31,15 @@ export function errorHandler(customCallback?: CustomCallback) {
       }
 
       if (result instanceof JsonApi) {
-        return response.send(result);
+        return new JsonApiResponse(res).send(result);
       }
+    }
+
+    if (
+      res.headersSent ||
+      req.headers['content-type'] !== JsonApi.contentType
+    ) {
+      return next(err);
     }
 
     let show_meta_on_error = true;
@@ -56,7 +54,7 @@ export function errorHandler(customCallback?: CustomCallback) {
       show_meta_on_error = false;
     }
 
-    return response.send(
+    return new JsonApiResponse(res).send(
       jsonApiException(show_meta_on_error)
         .setHttpStatusCode(StatusCodes.INTERNAL_SERVER_ERROR)
         .setErrorsFromNodejs(err)
